@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour {
 	private static GameManager instance;
 	private GameState currentState;
 
-	public static GameManager Instance {get{return instance;}}
+	public static GameManager Instance { get{return instance;} }
 	public GameState State 
 	{
 		get { return currentState; }
