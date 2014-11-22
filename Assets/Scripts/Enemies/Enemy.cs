@@ -11,6 +11,8 @@ public class Enemy : MonoBehaviour {
 	public float minimumRoamRange = -1.5f;
 	public float roamMinTime = 0.5f;
 	public float roamMaxTime = 2.0f;
+	public float attackCooldown = 1.0f;
+	public int attackDamage = 2;
 	private Vector3 targetPosition;
 	private float roamWaitTime;
 	private EnemyState state;
@@ -68,6 +70,21 @@ public class Enemy : MonoBehaviour {
 			targetPrefab = cld.transform;
 			playerComponent = targetPrefab.GetComponent<Player>();
 			SetState(EnemyState.Attacking);
+			StartCoroutine(Attack());
+		}
+	}
+
+	IEnumerator Attack()
+	{
+		while(state == EnemyState.Attacking)
+		{
+			float distance = Vector3.Distance(targetPrefab.position, transform.position);
+			if(distance <= playerComponent.keepEnemyInRange + 0.1f)
+			{
+				playerComponent.TakeDamage(attackDamage);
+				yield return new WaitForSeconds(attackCooldown);
+			}
+			yield return new WaitForEndOfFrame();
 		}
 	}
 
