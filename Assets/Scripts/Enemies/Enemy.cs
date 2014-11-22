@@ -4,6 +4,7 @@ using System.Collections;
 public class Enemy : MonoBehaviour {
 	[HideInInspector]
 	public Transform targetPrefab;
+	public int healthPoints = 100;
 	public float walkSpeed = 2.5f;
 	public float runSpeed = 4.0f;
 	public float maximumRoamRange = 1.5f;
@@ -14,6 +15,7 @@ public class Enemy : MonoBehaviour {
 	private float roamWaitTime;
 	private EnemyState state;
 	private NavMeshAgent agent;
+	private Player playerComponent;
 	// Use this for initialization
 	void Start () 
 	{
@@ -44,7 +46,9 @@ public class Enemy : MonoBehaviour {
 	{
 		if(state == EnemyState.Attacking)
 		{
-			agent.SetDestination(targetPrefab.transform.position);
+			Vector3 dir = (targetPrefab.position - transform.position).normalized * playerComponent.keepEnemyInRange;
+			targetPosition = targetPrefab.position - dir;
+			agent.SetDestination(targetPosition);
 		}
 	}
 
@@ -57,12 +61,13 @@ public class Enemy : MonoBehaviour {
 		state = newState;
 	}
 
-	void OnTriggerEnder(Collider cld)
+	void OnTriggerEnter(Collider cld)
 	{
 		if(cld.CompareTag("Player"))
 		{
-			SetState(EnemyState.Attacking);
 			targetPrefab = cld.transform;
+			playerComponent = targetPrefab.GetComponent<Player>();
+			SetState(EnemyState.Attacking);
 		}
 	}
 
