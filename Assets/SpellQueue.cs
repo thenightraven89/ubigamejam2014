@@ -15,12 +15,14 @@ public class SpellQueue : MonoBehaviour
     private float triggerTime = 0.3f;
 
     public Color[] spellTypes;
+	public SpellLevels[] spells;
 
     public static SpellQueue instance;
 
     private int[] chargeValues;
 
     public Transform tileSpawnPoint;
+	public Transform spellSpawnPoint;
 
     void Awake()
     {
@@ -127,6 +129,8 @@ public class SpellQueue : MonoBehaviour
     private void CastSpecificSpell(int spellType)
     {
         Debug.Log("Spell cast: " + spellType);
+		Instantiate(spells[spellType].spellLevels[chargeValues[spellType]],
+		            spellSpawnPoint.position, spellSpawnPoint.rotation);
         ClearUsedTiles();
         // cast the spell having the key [spellType], from the collections of spells (monobeh) on the object
     }
