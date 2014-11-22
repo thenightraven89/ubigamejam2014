@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
 	[HideInInspector]
-	public Transform playerPrefab;
+	public Transform targetPrefab;
 	public float walkSpeed = 2.5f;
 	public float runSpeed = 4.0f;
 	public float maximumRoamRange = 1.5f;
@@ -40,10 +40,12 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	// Update is called once per frame
-	void Update () 
+	void FixedUpdate () 
 	{
-
+		if(state == EnemyState.Attacking)
+		{
+			agent.SetDestination(targetPrefab.transform.position);
+		}
 	}
 
 	void SetState(EnemyState newState)
@@ -53,6 +55,15 @@ public class Enemy : MonoBehaviour {
 		if(newState == EnemyState.Attacking)
 			agent.speed = runSpeed;
 		state = newState;
+	}
+
+	void OnTriggerEnder(Collider cld)
+	{
+		if(cld.CompareTag("Player"))
+		{
+			SetState(EnemyState.Attacking);
+			targetPrefab = cld.transform;
+		}
 	}
 
 	public enum EnemyState
