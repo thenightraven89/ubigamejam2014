@@ -13,4 +13,13 @@ public class Player : MonoBehaviour {
 			GameManager.Instance.State = new GameEndedState();
 		}
 	}
+
+	public void Heal(int amount)
+	{
+		hitPoints += amount;
+		if(hitPoints > 100)
+		{
+			hitPoints = 100;
+		}
+	}
 }
