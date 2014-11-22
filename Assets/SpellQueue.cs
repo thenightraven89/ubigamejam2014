@@ -155,6 +155,11 @@ public class SpellQueue : MonoBehaviour
             LeanTween.moveLocalX(tiles[i], i * tileDistance, tileRefreshTime).setEase(LeanTweenType.easeOutQuad);
         }
 
+		for (int i = 0; i < chargeValues.Length; i++)
+		{
+			chargeValues[i]=0;
+		}
+
         StartCoroutine("AddMissingTiles");
     }
 
