@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour {
 	[HideInInspector]
 	public Transform targetPrefab;
-	public int healthPoints = 100;
+	public int hitPoints = 100;
 	public float walkSpeed = 2.5f;
 	public float runSpeed = 4.0f;
 	public float maximumRoamRange = 1.5f;
@@ -18,17 +19,24 @@ public class Enemy : MonoBehaviour {
 	private EnemyState state;
 	private NavMeshAgent agent;
 	private Player playerComponent;
+	private List<Debuff> debuffs;
+
+	private float currentSpeed;
+
+	public float currentSpeedModifier = 1f;
 	// Use this for initialization
 	void Start () 
 	{
+		currentSpeed = walkSpeed;
 		agent = GetComponent<NavMeshAgent>();
 		SetState(EnemyState.Idle);
 		StartCoroutine(ChangeRoamPosition());
+		debuffs = new List<Debuff>();
 	}
 
 	IEnumerator ChangeRoamPosition()
 	{
-		yield return new WaitForSeconds(Random.Range(2f, 4f));
+		//yield return new WaitForSeconds(Random.Range(2f, 4f));
 		while(true)
 		{
 			roamWaitTime = Random.Range (roamMinTime, roamMaxTime);
@@ -46,6 +54,7 @@ public class Enemy : MonoBehaviour {
 
 	void FixedUpdate () 
 	{
+		agent.speed = currentSpeed * currentSpeedModifier;
 		if(state == EnemyState.Attacking)
 		{
 			Vector3 dir = (targetPrefab.position - transform.position).normalized * playerComponent.keepEnemyInRange;
@@ -54,12 +63,33 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
+	void Update()
+	{
+		//I know, for in update, but it only executes if there are debuffs, so it is cool.
+		for(int i=0; i<debuffs.Count; i++)
+		{
+			debuffs[i].DecreaseTtl(Time.deltaTime);
+			if(debuffs[i].RanOut)
+			{
+				debuffs[i].Unapply();
+				debuffs.RemoveAt(i);
+			}
+		}
+	}
+
+	void ApplyDebuff(Debuff newDebuff)
+	{
+		newDebuff.SetTarget(this);
+		debuffs.Add(newDebuff);
+		newDebuff.Apply();
+	}
+
 	void SetState(EnemyState newState)
 	{
 		if(newState == EnemyState.Idle)
-			agent.speed = walkSpeed;
+			currentSpeed = walkSpeed;
 		if(newState == EnemyState.Attacking)
-			agent.speed = runSpeed;
+			currentSpeed = runSpeed;
 		state = newState;
 	}
 
@@ -88,9 +118,19 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
+	public void TakeDamage(int amount)
+	{
+		hitPoints = hitPoints - amount;
+		if(hitPoints <= 0)
+		{
+			GameManager.Instance.State = new GameEndedState();
+		}
+	}
+
 	public enum EnemyState
 	{
 		Idle,
-		Attacking
+		Attacking,
+		Dead
 	}
 }
