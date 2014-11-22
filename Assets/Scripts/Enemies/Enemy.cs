@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour {
 	private NavMeshAgent agent;
 	private Player playerComponent;
 	private List<Debuff> debuffs;
-
+	private float attackDistance;
 	private float currentSpeed;
 
 	public float currentSpeedModifier = 1f;
@@ -33,6 +33,7 @@ public class Enemy : MonoBehaviour {
 		SetState(EnemyState.Idle);
 		StartCoroutine(ChangeRoamPosition());
 		debuffs = new List<Debuff>();
+		attackDistance = GameObject.FindWithTag("Player").GetComponent<Player>().keepEnemyInRange;
 	}
 
 	IEnumerator ChangeRoamPosition()
@@ -88,7 +89,7 @@ public class Enemy : MonoBehaviour {
 		return null;
 	}
 
-	void ApplyDebuff(Debuff newDebuff)
+	public void ApplyDebuff(Debuff newDebuff)
 	{
 		Debuff old = CheckIfDebuffExists(newDebuff);
 		if(old == null)
@@ -130,7 +131,7 @@ public class Enemy : MonoBehaviour {
 		while(state == EnemyState.Attacking)
 		{
 			float distance = Vector3.Distance(targetPrefab.position, transform.position);
-			if(distance <= playerComponent.keepEnemyInRange + 0.1f)
+			if(distance <= attackDistance+0.1f)
 			{
 				playerComponent.TakeDamage(attackDamage);
 				yield return new WaitForSeconds(attackCooldown);
