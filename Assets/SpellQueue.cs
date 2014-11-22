@@ -19,6 +19,8 @@ public class SpellQueue : MonoBehaviour
 
     private int[] chargeValues;
 
+    public Transform tileSpawnPoint;
+
     void Awake()
     {
         instance = this;
@@ -31,15 +33,19 @@ public class SpellQueue : MonoBehaviour
     {
         tiles = new List<GameObject>();
 
-        for (int i = 0; i < tileCount; i++)
-        {
-            GameObject newTile = GameObject.Instantiate(sourceTile) as GameObject;
-            tiles.Add(newTile);
-            tiles[i].transform.parent = transform;
-            tiles[i].transform.localPosition = - Vector3.left * i * tileDistance;
-            tiles[i].transform.localRotation = Quaternion.identity;
-            tiles[i].GetComponent<Tile>().InitializeRandom();
-        }
+        StartCoroutine("AddMissingTiles");
+
+        //for (int i = 0; i < tileCount; i++)
+        //{
+        //    GameObject newTile = GameObject.Instantiate(sourceTile) as GameObject;
+        //    tiles.Add(newTile);
+        //    tiles[i].transform.parent = transform;
+        //    tiles[i].transform.localPosition = tileSpawnPoint.localPosition;
+        //    tiles[i].transform.localRotation = Quaternion.identity;
+        //    tiles[i].GetComponent<Tile>().InitializeRandom();
+
+        //    LeanTween.moveLocalX(tiles[i], i * tileDistance, 0.5f);
+        //}
     }
 
     public void AddChargeFromTile(int index)
@@ -125,7 +131,30 @@ public class SpellQueue : MonoBehaviour
 
         for (int i = 0; i < tiles.Count; i++)
         {
-            LeanTween.moveLocalX(tiles[i], i * tileDistance, 0.5f);
+            LeanTween.moveLocalX(tiles[i], i * tileDistance, 0.5f).setEase(LeanTweenType.easeOutQuad);
         }
+
+        StartCoroutine("AddMissingTiles");
+    }
+
+    private IEnumerator AddMissingTiles()
+    {
+        while (tiles.Count < tileCount)
+        {
+            AddRandomTile();
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    private void AddRandomTile()
+    {
+        GameObject newTile = GameObject.Instantiate(sourceTile) as GameObject;
+        tiles.Add(newTile);
+        newTile.transform.parent = transform;
+        newTile.transform.localPosition = tileSpawnPoint.localPosition;
+        newTile.transform.localRotation = Quaternion.identity;
+        newTile.GetComponent<Tile>().InitializeRandom();
+
+        LeanTween.moveLocalX(newTile, (tiles.Count - 1) * tileDistance, 0.5f).setEase(LeanTweenType.easeOutQuad);
     }
 }
