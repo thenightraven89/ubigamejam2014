@@ -11,7 +11,8 @@ public class SpellQueue : MonoBehaviour
     List<GameObject> tiles;
     private float tileDistance = 1.1f;
 
-    private float triggerTime = 2f;
+    // time you have to wait in order to trigger spell
+    private float triggerTime = 0.3f;
 
     public Color[] spellTypes;
 
@@ -117,6 +118,9 @@ public class SpellQueue : MonoBehaviour
         // cast the spell having the key [spellType], from the collections of spells (monobeh) on the object
     }
 
+    private float tileRefreshTime = 0.2f;
+    private float tileRefreshDelay = 0.1f;
+
     private void ClearUsedTiles()
     {
         // reverse removal
@@ -131,7 +135,7 @@ public class SpellQueue : MonoBehaviour
 
         for (int i = 0; i < tiles.Count; i++)
         {
-            LeanTween.moveLocalX(tiles[i], i * tileDistance, 0.5f).setEase(LeanTweenType.easeOutQuad);
+            LeanTween.moveLocalX(tiles[i], i * tileDistance, tileRefreshTime).setEase(LeanTweenType.easeOutQuad);
         }
 
         StartCoroutine("AddMissingTiles");
@@ -142,7 +146,7 @@ public class SpellQueue : MonoBehaviour
         while (tiles.Count < tileCount)
         {
             AddRandomTile();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(tileRefreshDelay);
         }
     }
 
@@ -155,6 +159,6 @@ public class SpellQueue : MonoBehaviour
         newTile.transform.localRotation = Quaternion.identity;
         newTile.GetComponent<Tile>().InitializeRandom();
 
-        LeanTween.moveLocalX(newTile, (tiles.Count - 1) * tileDistance, 0.5f).setEase(LeanTweenType.easeOutQuad);
+        LeanTween.moveLocalX(newTile, (tiles.Count - 1) * tileDistance, tileRefreshTime).setEase(LeanTweenType.easeOutQuad);
     }
 }
