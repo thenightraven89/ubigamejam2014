@@ -36,7 +36,7 @@ public class SpellQueue : MonoBehaviour
             GameObject newTile = GameObject.Instantiate(sourceTile) as GameObject;
             tiles.Add(newTile);
             tiles[i].transform.parent = transform;
-            tiles[i].transform.localPosition = Vector3.left * i * tileDistance;
+            tiles[i].transform.localPosition = - Vector3.left * i * tileDistance;
             tiles[i].transform.localRotation = Quaternion.identity;
             tiles[i].GetComponent<Tile>().InitializeRandom();
         }
@@ -50,12 +50,18 @@ public class SpellQueue : MonoBehaviour
 
         if (CanAddChargeOfType(spellType))
         {
+            Debug.Log("can add type " + spellType);
             StartCoroutine("SpellTrigger");
             chargeValues[spellType]++;
             tiles[index].GetComponent<Tile>().MarkForUse();
         }
         else
         {
+            Debug.Log("cannot add type " + spellType + " to ");
+            for (int i = 0; i < chargeValues.Length; i++)
+            {
+                Debug.Log(chargeValues[i]);
+            }
             // this means that we have another type charged and we cancel it
         }        
     }
@@ -64,7 +70,7 @@ public class SpellQueue : MonoBehaviour
     {
         for (int i = 0; i < chargeValues.Length; i++)
         {
-            if (chargeValues[i] != 0 && chargeValues[i] != spellType)
+            if (chargeValues[i] != 0 && i != spellType)
             {
                 return false;
             }
@@ -80,6 +86,7 @@ public class SpellQueue : MonoBehaviour
 
     private IEnumerator SpellTrigger()
     {
+        Debug.Log("spell trigger started");
         yield return new WaitForSeconds(triggerTime);
         CastSpell();
     }

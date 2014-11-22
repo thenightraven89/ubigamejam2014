@@ -9,9 +9,12 @@ public class InputManager : MonoBehaviour
 	public bool limitDiagonalSpeed = true;
 	private CharacterController controller;
 
+    private ButtonBinding[] bindings;
+
 	void Start()
 	{
 		controller = GetComponent<CharacterController>();
+        bindings = GetComponents<ButtonBinding>();
 	}
 
     void Update()
@@ -33,5 +36,13 @@ public class InputManager : MonoBehaviour
 		float inputModifyFactor = (inputX != 0.0f && inputY != 0.0f && limitDiagonalSpeed)? .7071f : 1.0f;
 		Vector3 moveDirection = new Vector3(inputX * inputModifyFactor, 0f, inputY * inputModifyFactor) * speed;
 		controller.Move(moveDirection * Time.deltaTime);
+
+        for (int i = 0; i < bindings.Length; i++)
+        {
+            if (Input.GetButtonDown(bindings[i].button))
+            {
+                SpellQueue.instance.AddChargeFromTile(bindings[i].tileIndex);
+            }
+        }
 	}
 }
