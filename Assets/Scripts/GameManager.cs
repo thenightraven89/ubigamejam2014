@@ -19,9 +19,10 @@ public class GameManager : MonoBehaviour {
 	void Awake()
 	{
 		instance = this;
+		DontDestroyOnLoad(this.gameObject);
 	}
 
-	private void SwitchState(GameState state)
+	public void SwitchState(GameState state)
 	{
 		if(currentState != null)
 		{
