@@ -68,7 +68,8 @@ public class SpellQueue : MonoBehaviour
         {
             Debug.Log("cannot add type " + spellType);
             // this means that we have another type charged and we cancel it
-            ClearUsedTiles();
+            StopCoroutine("CancelCasting");
+            StartCoroutine("CancelCasting");
         }        
     }
 
@@ -95,6 +96,19 @@ public class SpellQueue : MonoBehaviour
         Debug.Log("spell trigger started");
         yield return new WaitForSeconds(triggerTime);
         CastSpell();
+    }
+
+    private float punishmentTime = 1f;
+
+    private IEnumerator CancelCasting()
+    {
+        Debug.Log("cancelled");
+
+        //gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, 3f, gameObject.transform.localPosition.z);
+        LeanTween.moveLocalY(gameObject, 0.5f, 0.2f).setEase(LeanTweenType.easeShake);
+
+        yield return new WaitForSeconds(punishmentTime);
+        ClearUsedTiles();
     }
 
     private void CastSpell()
