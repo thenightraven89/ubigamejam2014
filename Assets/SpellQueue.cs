@@ -55,21 +55,20 @@ public class SpellQueue : MonoBehaviour
 
         int spellType = tiles[index].GetComponent<Tile>().GetSpellType();
 
+        tiles[index].GetComponent<Tile>().MarkForUse();
+
         if (CanAddChargeOfType(spellType))
         {
             Debug.Log("can add type " + spellType);
             StartCoroutine("SpellTrigger");
             chargeValues[spellType]++;
-            tiles[index].GetComponent<Tile>().MarkForUse();
+            
         }
         else
         {
-            Debug.Log("cannot add type " + spellType + " to ");
-            for (int i = 0; i < chargeValues.Length; i++)
-            {
-                Debug.Log(chargeValues[i]);
-            }
+            Debug.Log("cannot add type " + spellType);
             // this means that we have another type charged and we cancel it
+            ClearUsedTiles();
         }        
     }
 
