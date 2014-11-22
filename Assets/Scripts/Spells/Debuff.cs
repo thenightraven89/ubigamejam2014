@@ -5,6 +5,12 @@ public abstract class Debuff
 {
 	protected Enemy targetEnemy;
 	protected float ttl;
+
+	public float TimeToLive 
+	{
+		get {return ttl;}
+		set {ttl = value;}
+	}
 	public bool RanOut {get { return ttl <=0f; } }
 
 	public Debuff(float timeToLive, Enemy targetEnemy = null)

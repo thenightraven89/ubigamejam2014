@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Enemy : MonoBehaviour {
 	[HideInInspector]
@@ -77,11 +78,29 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
+	Debuff CheckIfDebuffExists(Debuff nd)
+	{
+		foreach(var d in debuffs)
+		{
+			if(nd.GetType() == d.GetType())
+				return d;
+		}
+		return null;
+	}
+
 	void ApplyDebuff(Debuff newDebuff)
 	{
-		newDebuff.SetTarget(this);
-		debuffs.Add(newDebuff);
-		newDebuff.Apply();
+		Debuff old = CheckIfDebuffExists(newDebuff);
+		if(old == null)
+		{
+			newDebuff.SetTarget(this);
+			debuffs.Add(newDebuff);
+			newDebuff.Apply();
+		}
+		else
+		{
+			old.TimeToLive = newDebuff.TimeToLive;
+		}
 	}
 
 	void SetState(EnemyState newState)
@@ -90,6 +109,8 @@ public class Enemy : MonoBehaviour {
 			currentSpeed = walkSpeed;
 		if(newState == EnemyState.Attacking)
 			currentSpeed = runSpeed;
+		if(newState == EnemyState.Dead)
+			Destroy(gameObject);
 		state = newState;
 	}
 
@@ -123,7 +144,7 @@ public class Enemy : MonoBehaviour {
 		hitPoints = hitPoints - amount;
 		if(hitPoints <= 0)
 		{
-			GameManager.Instance.State = new GameEndedState();
+			SetState(EnemyState.Dead);
 		}
 	}
 
