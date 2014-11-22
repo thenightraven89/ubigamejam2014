@@ -107,6 +107,25 @@ public class SpellQueue : MonoBehaviour
     private void CastSpecificSpell(int spellType)
     {
         Debug.Log("Spell cast: " + spellType);
+        ClearUsedTiles();
         // cast the spell having the key [spellType], from the collections of spells (monobeh) on the object
+    }
+
+    private void ClearUsedTiles()
+    {
+        // reverse removal
+        for (int i = tiles.Count - 1; i >= 0; i--)
+        {
+            if (tiles[i].GetComponent<Tile>().IsUsed())
+            {
+                GameObject.Destroy(tiles[i]);
+                tiles.RemoveAt(i);
+            }
+        }
+
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            LeanTween.moveLocalX(tiles[i], i * tileDistance, 0.5f);
+        }
     }
 }
