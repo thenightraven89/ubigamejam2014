@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Shield : MonoBehaviour {
-	
+	public static float stack = 0;
 	public float radius = 10f;
 	public float spreadTime = 0.2f;
 	public float timeToLive = 10f;
@@ -11,6 +11,7 @@ public class Shield : MonoBehaviour {
 	Player pl;
 	void Start () 
 	{
+		stack++;
 		LeanTween.scale(gameObject, new Vector3(radius,radius,radius), spreadTime);
 		StartCoroutine(DestroyShield());
 		pl = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
@@ -20,7 +21,12 @@ public class Shield : MonoBehaviour {
 	IEnumerator DestroyShield()
 	{
 		yield return new WaitForSeconds(timeToLive);
-		pl.keepEnemyInRange = pl.initRange;
+		stack--;
+		if(stack<=0)
+		{
+			stack = 0;
+			pl.keepEnemyInRange = pl.initRange;
+		}
 		Destroy(gameObject);
 	}
 
