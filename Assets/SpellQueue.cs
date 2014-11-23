@@ -24,11 +24,11 @@ public class SpellQueue : MonoBehaviour
 
     public Transform tileSpawnPoint;
 	public Transform spellSpawnPoint;
-
+	private Transform hero;
     void Awake()
     {
         instance = this;
-
+		hero = GameObject.Find("Hero").transform;
         chargeValues = new int[spellTypes.Length];
     }
 
@@ -141,6 +141,8 @@ public class SpellQueue : MonoBehaviour
 		Instantiate(spells[spellType].spellLevels[chargeValues[spellType]],
 		            spellSpawnPoint.position, spellSpawnPoint.rotation);
         ClearUsedTiles();
+		hero.animation.Play ("Attack");
+		hero.animation.PlayQueued("Idle");
         // cast the spell having the key [spellType], from the collections of spells (monobeh) on the object
     }
 
