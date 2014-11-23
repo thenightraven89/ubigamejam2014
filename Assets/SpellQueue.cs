@@ -90,7 +90,15 @@ public class SpellQueue : MonoBehaviour
 
     internal int GetRandomSpellType()
     {
-        return Random.Range(0, spellTypes.Length);
+        int rnd = Random.Range(0, spellTypes.Length * 2);
+        if (rnd < spellTypes.Length)
+        {
+            return rnd;
+        }
+        else
+        {
+            return 1;
+        }
     }
 
     private IEnumerator SpellTrigger()
