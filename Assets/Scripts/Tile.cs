@@ -26,7 +26,7 @@ public class Tile : MonoBehaviour
 
     internal void MarkForUse()
     {
-		renderer.material = defaultMaterial;
+		renderer.material = SpellQueue.instance.graySpell[spellType];
         isUsed = true;
     }
 
