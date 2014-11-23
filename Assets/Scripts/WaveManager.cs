@@ -27,8 +27,6 @@ public class WaveManager : MonoBehaviour
         instance = this;
     }
 
-    public AudioSource[] sfx;
-
     // Use this for initialization
     void Start()
     {
@@ -48,6 +46,8 @@ public class WaveManager : MonoBehaviour
             text.text = "Wave " + (int)(currentWaveId + 1);
 
             yield return new WaitForSeconds(waveCooldownTime);
+
+            AudioManager.instance.Play(currentWaveId);
 
             text.text = "";
 
