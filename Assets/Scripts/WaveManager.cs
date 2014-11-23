@@ -3,6 +3,8 @@ using System.Collections;
 
 public class WaveManager : MonoBehaviour
 {
+    public static WaveManager instance;
+
     private float minWaitBetweenMobs = 0.25f;
     private float maxWaitBetweenMobs = 0.75f;
 
@@ -17,6 +19,13 @@ public class WaveManager : MonoBehaviour
     private int waveCount = 2;
 
     private float waveCooldownTime = 5f;
+
+    public UnityEngine.UI.Text text;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     // Use this for initialization
     void Start()
@@ -34,7 +43,11 @@ public class WaveManager : MonoBehaviour
     {
         while (currentWaveId < waveCount)
         {
+            text.text = "Wave " + (int)(currentWaveId + 1);
+
             yield return new WaitForSeconds(waveCooldownTime);
+
+            text.text = "";
 
             while (!WaveIsFinished(currentWaveId))
             {
@@ -75,5 +88,10 @@ public class WaveManager : MonoBehaviour
         }
 
         return true;
+    }
+
+    public void SetGameOverText()
+    {
+        text.text = "Game Over";
     }
 }
