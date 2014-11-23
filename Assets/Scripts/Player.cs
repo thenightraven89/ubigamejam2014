@@ -7,7 +7,7 @@ public class Player : MonoBehaviour {
 	public float initRange;
 	public int hitPoints = 100;
 
-	void Start()
+	void Awake()
 	{
 		initRange = keepEnemyInRange;
 	}

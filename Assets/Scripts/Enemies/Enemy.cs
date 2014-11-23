@@ -131,9 +131,12 @@ public class Enemy : MonoBehaviour {
 		while(state == EnemyState.Attacking)
 		{
 			float distance = Vector3.Distance(targetPrefab.position, transform.position);
-			if(distance <= attackDistance+0.1f)
+			if(distance <= attackDistance+0.3f)
 			{
 				playerComponent.TakeDamage(attackDamage);
+				Transform child = transform.GetChild(1);
+				child.animation.Play ("Attack");
+				child.animation.PlayQueued("Walk");
 				yield return new WaitForSeconds(attackCooldown);
 			}
 			yield return new WaitForEndOfFrame();
