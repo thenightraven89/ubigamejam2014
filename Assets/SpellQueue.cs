@@ -14,7 +14,7 @@ public class SpellQueue : MonoBehaviour
     // time you have to wait in order to trigger spell
     private float triggerTime = 0.3f;
 
-    public Color[] spellTypes;
+    public Material[] spellTypes;
 	public SpellLevels[] spells;
 
     public static SpellQueue instance;

@@ -8,7 +8,10 @@ public class FireBlast : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		transform.position = transform.position + transform.forward * Time.deltaTime * speed;
+		if(renderer.enabled)
+		{
+			transform.position = transform.position + transform.forward * Time.deltaTime * speed;
+		}
 	}
 
 	void OnTriggerEnter(Collider col)
@@ -19,7 +22,17 @@ public class FireBlast : MonoBehaviour {
 		}
 		else
 		{
-			Destroy(gameObject);
+			StartCoroutine(DestroyDelay());
 		}
+	}
+
+	IEnumerator DestroyDelay()
+	{
+		renderer.enabled = false;
+		ParticleSystem[] sys = GetComponentsInChildren<ParticleSystem>();
+		foreach(var s in sys)
+			s.enableEmission = false;
+		yield return new WaitForSeconds(10f);
+		Destroy (gameObject);
 	}
 }

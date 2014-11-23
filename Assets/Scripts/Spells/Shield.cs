@@ -8,21 +8,19 @@ public class Shield : MonoBehaviour {
 	public float timeToLive = 10f;
 	//private FreezeDebuff debuff;
 
-	float range;
 	Player pl;
 	void Start () 
 	{
 		LeanTween.scale(gameObject, new Vector3(radius,radius,radius), spreadTime);
 		StartCoroutine(DestroyShield());
 		pl = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-		range = pl.keepEnemyInRange;
 		pl.keepEnemyInRange = radius-4f;
 	}
 	
 	IEnumerator DestroyShield()
 	{
 		yield return new WaitForSeconds(timeToLive);
-		pl.keepEnemyInRange = range;
+		pl.keepEnemyInRange = pl.initRange;
 		Destroy(gameObject);
 	}
 

@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Tile : MonoBehaviour
 {
-    private Color color;
+	public Material defaultMaterial;
+    private Material material;
 
     //index in spellqueue spelltypes
     private int spellType;
@@ -18,15 +19,14 @@ public class Tile : MonoBehaviour
     internal void Initialize(int newSpellType)
     {
         spellType = newSpellType;
-        color = SpellQueue.instance.spellTypes[spellType];
-        renderer.material.color = color;
+        material = SpellQueue.instance.spellTypes[spellType];
+        renderer.material = material;
         isUsed = false;
     }
 
     internal void MarkForUse()
     {
-        color = Color.gray;
-        renderer.material.color = color;
+		renderer.material = defaultMaterial;
         isUsed = true;
     }
 
