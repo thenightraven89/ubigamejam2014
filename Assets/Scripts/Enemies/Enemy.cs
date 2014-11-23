@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour {
 		SetState(EnemyState.Idle);
 		StartCoroutine(ChangeRoamPosition());
 		debuffs = new List<Debuff>();
-		attackDistance = GameObject.FindWithTag("Player").GetComponent<Player>().keepEnemyInRange;
+		attackDistance = GameObject.FindWithTag("Player").GetComponent<Player>().initRange;
 	}
 
 	IEnumerator ChangeRoamPosition()

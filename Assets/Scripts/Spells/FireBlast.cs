@@ -4,7 +4,12 @@ using System.Collections;
 public class FireBlast : MonoBehaviour {
 	public int damage = 20;
 	public float speed = 25f;
-	
+
+	void Start()
+	{
+		GameObject.Find("Main Camera").GetComponent<CameraShake>().shake = .1f;
+	}
+
 	// Update is called once per frame
 	void Update () 
 	{
