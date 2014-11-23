@@ -15,6 +15,7 @@ public class SpellQueue : MonoBehaviour
     private float triggerTime = 0.3f;
 
     public Material[] spellTypes;
+	public Material[] graySpell;
 	public SpellLevels[] spells;
 
     public static SpellQueue instance;
