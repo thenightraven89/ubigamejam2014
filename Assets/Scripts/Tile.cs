@@ -21,7 +21,7 @@ public class Tile : MonoBehaviour
         spellType = newSpellType;
         material = SpellQueue.instance.spellTypes[spellType];
         renderer.material = material;
-        isUsed = false;
+        isUsed = false; 
     }
 
     internal void MarkForUse()
