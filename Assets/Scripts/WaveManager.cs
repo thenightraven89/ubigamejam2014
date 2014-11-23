@@ -27,6 +27,8 @@ public class WaveManager : MonoBehaviour
         instance = this;
     }
 
+    public AudioSource[] sfx;
+
     // Use this for initialization
     void Start()
     {
