@@ -9,7 +9,7 @@ public class SpellQueue : MonoBehaviour
     private int tileCount = 6;
 
     List<GameObject> tiles;
-    private float tileDistance = 1.1f;
+    private float tileDistance = 0.55f;
 
     // time you have to wait in order to trigger spell
     private float triggerTime = 0.3f;

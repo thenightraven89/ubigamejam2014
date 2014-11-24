@@ -37,7 +37,7 @@ public class FireBlast : MonoBehaviour {
 		ParticleSystem[] sys = GetComponentsInChildren<ParticleSystem>();
 		foreach(var s in sys)
 			s.enableEmission = false;
-		yield return new WaitForSeconds(10f);
+		yield return new WaitForSeconds(4f);
 		Destroy (gameObject);
 	}
 }

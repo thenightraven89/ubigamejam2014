@@ -5,6 +5,7 @@ public class GameEndedState : GameState
 {
 	public override void TransitionIn()
 	{
+        Debug.Log("qq");
 		Time.timeScale = 0f;
         WaveManager.instance.SetGameOverText();
 	}

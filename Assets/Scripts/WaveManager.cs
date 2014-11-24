@@ -16,7 +16,7 @@ public class WaveManager : MonoBehaviour
 
     private int spawnerCursor;
 
-    private int waveCount = 2;
+    private int waveCount = 3;
 
     private float waveCooldownTime = 5f;
 
